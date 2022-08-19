@@ -1,4 +1,4 @@
-import { IsEmail,IsString, MaxLength, MinLength, registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
+import { IsBoolean, IsEmail,IsString, MaxLength, MinLength, registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 
 function Match(property: string, validationOptions?: ValidationOptions) {
     return (object: any, propertyName: string) => {
@@ -38,5 +38,8 @@ export class CreateUserDto{
     @MaxLength(20)
     @Match('password',{message:'Password and confirmPassword does not match'})
     confirmPassword:string;
+
+    @IsBoolean()
+    isAdmin:boolean;
 
 }
