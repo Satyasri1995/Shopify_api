@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import { ProductModule } from './modules/product/product.module';
 import { ShopModule } from './modules/shop/shop.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ShopModule } from './modules/shop/shop.module';
       }),
       inject: [ConfigService],
     }),
+    EventEmitterModule.forRoot(),
     UserModule,
     ProductModule,
     ShopModule,

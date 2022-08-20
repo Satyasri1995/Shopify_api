@@ -5,10 +5,11 @@ import { Model,Document } from 'mongoose';
 import { Crypto } from 'src/utils/crypto';
 import { IUser, User, UserSchemaName } from 'src/modules/user/models/user.model';
 import { CreateUserDto, UserDto } from '../dtos/UserDto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(UserSchemaName) private User:Model<IUser>){}
+    constructor(@InjectModel(UserSchemaName) private User:Model<IUser>,private readonly event:EventEmitter2){}
 
     async createUser(data:CreateUserDto){
         const exist = await this.User.exists({mail:data.mail});
@@ -25,6 +26,7 @@ export class UserService {
         if(!createdUser){
             throw new ServiceUnavailableException("Failed to create the user");
         }
+        this.event.emit(["order.create","wishlist.create","cart.create"],{id:createdUser._id});
         return "User created successfully";
     }
 
