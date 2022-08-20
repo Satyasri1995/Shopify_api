@@ -8,14 +8,10 @@ import { OnEvent } from '@nestjs/event-emitter';
 export class CartService {
     constructor(@InjectModel(CartSchemaName) private readonly Cart:Model<ICart>){}
 
-    @OnEvent("order.create")
-    async createCart(id:string){
+    @OnEvent("user.created",{async:true})
+    createCart(id:string){
         const cart = new this.Cart();
         cart.user=id;
-        const cartResult = await cart.save();
-        if(!cartResult){
-            throw new ServiceUnavailableException("failed to create cacrt"); 
-        }
-        return "Cart created successfully";
+        cart.save();
     }
 }

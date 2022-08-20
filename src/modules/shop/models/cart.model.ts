@@ -1,6 +1,5 @@
-import { IUser } from './../../../../dist/modules/user/models/user.model.d';
 import { ProductSchemaName, IProduct } from './../../product/models/product.model';
-import { UserSchemaName } from './../../user/models/user.model';
+import { IUser, UserSchemaName } from './../../user/models/user.model';
 import { SchemaTypes } from 'mongoose';
 import { Schema } from 'mongoose';
 
@@ -10,9 +9,9 @@ export const CartSchema = new Schema({
     required: true,
     ref: UserSchemaName,
   },
-  items: [
+  products: [
     {
-      item: {
+      product: {
         type: SchemaTypes.ObjectId,
         required: true,
         ref: ProductSchemaName,
@@ -31,8 +30,8 @@ export interface ICart{
     id:string;
     _id:string;
     user:string|IUser;
-    items:{
-        item:IProduct|string,
+    products:{
+        product:IProduct|string,
         quantity:number
     }[];
     createdAt:Date;
@@ -42,8 +41,8 @@ export interface ICart{
 export class Cart{
     id:string;
     user:string|IUser;
-    items:{
-        item:IProduct|string,
+    products:{
+        product:IProduct|string,
         quantity:number
     }[];
     createdAt:Date;
@@ -51,7 +50,7 @@ export class Cart{
     constructor(data:ICart){
         this.id=data.id||data._id;
         this.user=data.user;
-        this.items=data.items;
+        this.products=data.products;
         this.createdAt=data.createdAt;
         this.updatedAt=data.updatedAt;
     }

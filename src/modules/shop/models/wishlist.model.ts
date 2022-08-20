@@ -27,7 +27,7 @@ export interface IWishlist{
     id:string;
     _id:string;
     user:string|IUser;
-    products:string[]|IProduct[];
+    products:(string|IProduct)[];
     createdAt:Date;
     updatedAt:Date;
 }
@@ -35,7 +35,7 @@ export interface IWishlist{
 export class Wishlist{
     id:string;
     user:string|IUser;
-    products:string[]|IProduct[];
+    products:(string|IProduct)[];
     createdAt:Date;
     updatedAt:Date;
     constructor(data:IWishlist){

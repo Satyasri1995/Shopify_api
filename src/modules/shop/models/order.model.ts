@@ -1,6 +1,5 @@
 import { IProduct } from './../../product/models/product.model';
-import { IUser } from './../../../../dist/modules/user/models/user.model.d';
-import { UserSchemaName } from './../../user/models/user.model';
+import { IUser, UserSchemaName } from './../../user/models/user.model';
 import { SchemaTypes } from 'mongoose';
 import { Schema } from 'mongoose';
 import { ProductSchemaName } from './../../../modules/product/models/product.model';
@@ -11,9 +10,9 @@ export const OrderSchema = new Schema({
     required: true,
     ref: UserSchemaName,
   },
-  items: [
+  products: [
     {
-      item: {
+      product: {
         type: SchemaTypes.ObjectId,
         required: true,
         ref: ProductSchemaName,
@@ -26,7 +25,8 @@ export const OrderSchema = new Schema({
   ],
   price:{
     type:SchemaTypes.Number,
-    required:true
+    required:true,
+    default:0
   }
 },{timestamps:true});
 
@@ -36,8 +36,8 @@ export interface IOrder{
     id:string;
     _id:string;
     user:string|IUser;
-    items:{
-        item:string|IProduct,
+    products:{
+        product:string|IProduct,
         quantity:number
     }[];
     price:number;
@@ -48,8 +48,8 @@ export interface IOrder{
 export class Order{
     id:string;
     user:string|IUser;
-    items:{
-        item:string|IProduct,
+    products:{
+        product:string|IProduct,
         quantity:number
     }[];
     price:number;
@@ -58,7 +58,7 @@ export class Order{
     constructor(data:IOrder){
         this.id=data.id||data._id;
         this.user=data.user;
-        this.items=data.items;
+        this.products=data.products;
         this.price=data.price;
         this.createdAt=data.createdAt;
         this.updatedAt=data.updatedAt;

@@ -1,7 +1,7 @@
 
 import { ConflictException, Injectable, NotFoundException, ServiceUnavailableException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model,Document } from 'mongoose';
+import { Model } from 'mongoose';
 import { Crypto } from 'src/utils/crypto';
 import { IUser, User, UserSchemaName } from 'src/modules/user/models/user.model';
 import { CreateUserDto, UserDto } from '../dtos/UserDto';
@@ -26,7 +26,7 @@ export class UserService {
         if(!createdUser){
             throw new ServiceUnavailableException("Failed to create the user");
         }
-        this.event.emit(["order.create","wishlist.create","cart.create"],{id:createdUser._id});
+        this.event.emit("user.created",createdUser._id);
         return "User created successfully";
     }
 

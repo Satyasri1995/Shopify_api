@@ -2,18 +2,16 @@ import { IOrder, OrderSchemaName } from './../models/order.model';
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class OrderService {
     constructor(@InjectModel(OrderSchemaName) private readonly Order:Model<IOrder>){}
 
-    async createOrder(id:string){
+    @OnEvent("user.created",{async:true})
+    createOrder(id:string){
         const order = new this.Order();
         order.user=id;
-        const orderResult = await order.save();
-        if(!orderResult){
-            throw new ServiceUnavailableException("Failed to create Order");
-        }
-        return "Order created successfully";
+        order.save();
     }
 }
