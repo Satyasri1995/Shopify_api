@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminModule } from './modules/admin/admin.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
+import { ProductModule } from './modules/product/product.module';
+import { ShopModule } from './modules/shop/shop.module';
 
 @Module({
   imports: [
-    AdminModule,
     ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -16,6 +16,8 @@ import { UserModule } from './modules/user/user.module';
       inject: [ConfigService],
     }),
     UserModule,
+    ProductModule,
+    ShopModule,
   ],
 })
 export class AppModule {}

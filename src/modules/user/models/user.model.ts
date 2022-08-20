@@ -3,10 +3,17 @@ import { Schema, SchemaTypes } from "mongoose";
 export class User {
     id: string;
     mail: string;
-    password: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     isAdmin: boolean;
+
+    constructor(data:IUser){
+      this.id=data._id||data.id;
+      this.mail=data.mail;
+      this.createdAt=data.createdAt;
+      this.updatedAt=data.updatedAt;
+      this.isAdmin=data.isAdmin;
+    }
   }
   
   export const UserSchema = new Schema({
@@ -28,9 +35,9 @@ export class User {
 
   export interface IUser{
     id:string;
+    _id:string;
     mail:string;
-    password:string;
-    createdAt:string;
-    updatedAt:string;
+    createdAt:Date;
+    updatedAt:Date;
     isAdmin:boolean
 }

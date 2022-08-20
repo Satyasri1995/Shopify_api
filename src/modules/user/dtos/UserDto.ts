@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail,IsString, MaxLength, MinLength, registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
+import { IsBoolean, IsEmail,IsMongoId,IsString, MaxLength, MinLength, registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 
 function Match(property: string, validationOptions?: ValidationOptions) {
     return (object: any, propertyName: string) => {
@@ -41,5 +41,18 @@ export class CreateUserDto{
 
     @IsBoolean()
     isAdmin:boolean;
+
+}
+
+export class UserDto{
+    
+    @IsMongoId()
+    id:string;
+
+    @IsEmail()
+    mail:string;
+
+    @IsBoolean()
+    isAdmin:boolean
 
 }
