@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common";
 import { IsMongoId } from "class-validator";
 
 export class OrderDto{
@@ -6,5 +7,9 @@ export class OrderDto{
 
     @IsMongoId()
     cart:string;
+
+    @IsMongoId()
+    @Optional()
+    product:string;
 
 }

@@ -20,7 +20,7 @@ export const OrderSchema = new Schema({
       quantity: {
         type: SchemaTypes.Number,
         required: true,
-      },
+      }
     },
   ],
   price:{
