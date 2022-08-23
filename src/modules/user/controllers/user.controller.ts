@@ -9,60 +9,22 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('signup')
-  async createUser(@Body() createUserDto: CreateUserDto,@Res() response:Response):Promise<void> {
-    
-    try {
-      const result = await this.userService.createUser(createUserDto);
-      response.json({
-        statusCode:response.statusCode,
-        data:result
-      })
-    } catch (error) {
-      response.statusCode=error.response.statusCode
-      response.json(error.response)
-    }
+  async createUser(@Body() createUserDto: CreateUserDto){
+    return await this.userService.createUser(createUserDto);
   }
 
   @Post('update')
-  async updateUser(@Body() userDto:UserDto,@Res() response:Response):Promise<void>{
-    try {
-      const updatedUser = await this.userService.updateUser(userDto);
-      const result = new User(updatedUser);
-      response.json({
-        statusCode:response.statusCode,
-        data:result
-      })
-    } catch (error) {
-      response.statusCode=error.response.statusCode
-      response.json(error.response)
-    }
+  async updateUser(@Body() userDto:UserDto){
+    return await this.userService.updateUser(userDto);
   }
 
   @Get("fetchAll")
-  async fetchAllUsers(@Res() response:Response){
-    try {
-      const users = await this.userService.fetchAllUsers();
-      response.json({
-        statusCode:response.statusCode,
-        data:users
-      })
-    } catch (error) {
-      response.statusCode=error.response.statusCode
-      response.json(error.response)
-    }
+  async fetchAllUsers(){
+    return await this.userService.fetchAllUsers();
   }
 
   @Post('delete/:id')
-  async deleteUser(@Param('id') id:string,@Res() response:Response){
-    try {
-      const result = await this.userService.deleteUser(id);
-      response.json({
-        statusCode:response.statusCode,
-        data:result
-      })
-    } catch (error) {
-      response.statusCode=error.response.statusCode
-      response.json(error.response)
-    }
+  async deleteUser(@Param('id') id:string){
+    return await this.userService.deleteUser(id);
   }
 }

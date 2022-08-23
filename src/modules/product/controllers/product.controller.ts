@@ -11,62 +11,23 @@ export class ProductController {
     constructor(private readonly productService:ProductService){}
 
     @Post("create")
-    async createProduct(@Body() createProductDto:CreateProductDto,@Res() response:Response){
-        try {
-            const productResult = await this.productService.createProduct(createProductDto);
-            const result = await new Product(productResult);
-            response.json({
-                statusCode:response.statusCode,
-                data:result
-              })
-            } catch (error) {
-              response.statusCode=error.response.statusCode
-              response.json(error.response)
-            }
+    async createProduct(@Body() createProductDto:CreateProductDto){
+      return await this.productService.createProduct(createProductDto);
     }
 
     @Post("update")
-    async updateProduct(@Body() productDto:ProductDto,@Res() response:Response){
-      try {
-        const productResult = await this.productService.updateProduct(productDto);
-        const result = await new Product(productResult);
-        response.json({
-            statusCode:response.statusCode,
-            data:result
-          })
-        } catch (error) {
-          response.statusCode=error.response.statusCode
-          response.json(error.response)
-        }
+    async updateProduct(@Body() productDto:ProductDto){
+      return await this.productService.updateProduct(productDto);
     }
 
     @Get("fetchAll")
-    async fetchAllProducts(@Res() response:Response){
-      try {
-        const result = await this.productService.findAllProducts();
-        const products = result.map(product=>new Product(product));
-        response.json({
-          statusCode:response.statusCode,
-          data:products
-        })
-      } catch (error) {
-        response.statusCode=error.response.statusCode
-        response.json(error.response)
-      }
+    async fetchAllProducts(){
+      await await this.productService.findAllProducts();
     }
 
     @Get("delete/:id")
-    async deleteProduct(@Param('id') id:string,@Res() response:Response){
-      try {
-        const result = await this.productService.deleteProduct(id);
-        response.json({
-          statusCode:response.statusCode,
-          data:result
-        })
-      } catch (error) {
-        response.statusCode=error.response.statusCode
-        response.json(error.response)
-      }
+    async deleteProduct(@Param('id') id:string){
+      return await this.productService.deleteProduct(id);
     }
 
 

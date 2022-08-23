@@ -1,5 +1,4 @@
-import { ICart } from './../../../../dist/modules/shop/models/cart.model.d';
-import { Cart, CartSchemaName } from './../models/cart.model';
+import { Cart, CartSchemaName, ICart } from './../models/cart.model';
 import { OrderDto } from './../dtos/order.dto';
 import { IOrder, Order, OrderSchemaName } from './../models/order.model';
 import {

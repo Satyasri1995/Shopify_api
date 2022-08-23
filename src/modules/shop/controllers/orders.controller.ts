@@ -8,44 +8,17 @@ export class OrdersController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post('add')
-  async addOrder(@Body() orderDto: OrderDto, @Res() response: Response) {
-    try {
-      const result = await this.orderService.addOrder(orderDto);
-      response.json({
-        statusCode: response.statusCode,
-        data: result,
-      });
-    } catch (error) {
-      response.statusCode = error.response.statusCode;
-      response.json(error.response);
-    }
+  async addOrder(@Body() orderDto: OrderDto) {
+    return await this.orderService.addOrder(orderDto);
   }
 
   @Get('fetchCart/:id')
-  async fetchCart(@Param('id') id: string, @Res() response: Response) {
-    try {
-      const result = await this.orderService.fetchOrder(id);
-      response.json({
-        statusCode: response.statusCode,
-        data: result,
-      });
-    } catch (error) {
-      response.statusCode = error.response.statusCode;
-      response.json(error.response);
-    }
+  async fetchCart(@Param('id') id: string) {
+    return await this.orderService.fetchOrder(id);
   }
 
   @Post('remove')
-  async removeOrder(@Body() orderDto: OrderDto, @Res() response: Response) {
-    try {
-      const result = await this.orderService.removeOrder(orderDto);
-      response.json({
-        statusCode: response.statusCode,
-        data: result,
-      });
-    } catch (error) {
-      response.statusCode = error.response.statusCode;
-      response.json(error.response);
-    }
+  async removeOrder(@Body() orderDto: OrderDto) {
+    return await this.orderService.removeOrder(orderDto);
   }
 }

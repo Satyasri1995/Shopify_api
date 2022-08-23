@@ -22,5 +22,23 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:3000/shopify/user/update HTTP/1.1
+Content-Type: application/json
+
+{
+  "id":"63011574c63b1467dfd4f488",
+  "mail":"xyz@gmail.com",
+  "password":"Test@1234",
+  "confirmPassword":"Test@1234",
+  "isAdmin":true
+}
+
+
+
+
+
+
+###
+
 GET http://localhost:3000/shopify/user/fetchAll HTTP/1.1
 
