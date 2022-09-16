@@ -53,6 +53,18 @@ export class UserDto{
     mail:string;
 
     @IsBoolean()
-    isAdmin:boolean
+    isAdmin:boolean;
+
+}
+
+export class SignInUserDto{
+
+    @IsEmail()
+    mail:string;
+
+    @IsString()
+    @MinLength(4)
+    @MaxLength(20)
+    password:string;
 
 }

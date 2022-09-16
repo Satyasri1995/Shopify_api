@@ -1,19 +1,12 @@
-import { createCipheriv, randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util';
+import * as bcrypt from 'bcrypt';
 
 export class Crypto {
   public async encryptPassword(password: string): Promise<string> {
-    const iv = randomBytes(16);
-    const key = (await promisify(scrypt)(
-      process.env.PASSWORD_GEN_KEY,
-      'salt',
-      32,
-    )) as Buffer;
-    const cipher = createCipheriv('aes-256-ctr', key, iv);
-    const encryptedPassword = Buffer.concat([
-      cipher.update(password),
-      cipher.final(),
-    ]);
-    return encryptedPassword.toString();
+    return await bcrypt.hash(password, process.env.PASSWORD_GEN_SALT);
   }
+
+  public async verifyPassword(password: string,hash:string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
+  }
+    
 }

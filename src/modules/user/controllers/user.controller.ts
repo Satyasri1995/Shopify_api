@@ -1,4 +1,4 @@
-import { CreateUserDto, UserDto } from './../dtos/UserDto';
+import { CreateUserDto, SignInUserDto, UserDto } from './../dtos/UserDto';
 import { UserService } from '../services/user.service';
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
@@ -26,5 +26,10 @@ export class UserController {
   @Post('delete/:id')
   async deleteUser(@Param('id') id:string){
     return await this.userService.deleteUser(id);
+  }
+
+  @Post('signin')
+  async signInUser(@Body() signInUserDto:SignInUserDto){
+    return await this.userService.signInUser(signInUserDto)
   }
 }
