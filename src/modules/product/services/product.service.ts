@@ -34,7 +34,7 @@ export class ProductService {
         if(!productResult){
             throw new ServiceUnavailableException("Failed to update the product");
         }
-        return productResult;
+        return "Product updated successfully";
     }
 
     async findAllProducts(){
