@@ -25,8 +25,8 @@ export class ErrorHandlerFilter implements ExceptionFilter {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
-      message:exception.response.message,
-      error:exception.response.error
+      message:exception.response?.message,
+      error:exception.response?.error
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, ServiceUnavailableException } from '@n
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateProductDto } from '../dtos/ProductDto';
-import { ProductSchemaName, IProduct } from '../models/product.model';
+import { ProductSchemaName, IProduct, Product } from '../models/product.model';
 
 
 @Injectable()
@@ -38,7 +38,9 @@ export class ProductService {
     }
 
     async findAllProducts(){
-        return await this.Product.find({});
+        const rawProducts = await this.Product.find({});
+        const products = rawProducts.map(product=>new Product(product));
+        return products;
     }
 
     async deleteProduct(id: string) {

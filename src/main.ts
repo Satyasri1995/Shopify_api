@@ -10,6 +10,12 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  await app.listen(3000);
+  app.enableCors({
+    origin: 'http://localhost:8100',
+    credentials: true,
+  });
+  await app.listen(3000,()=>{
+    console.log(`Server started on http://localhost:3000/`)
+  });
 }
 bootstrap();

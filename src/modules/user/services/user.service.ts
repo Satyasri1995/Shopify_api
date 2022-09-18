@@ -8,12 +8,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Crypto } from 'src/utils/crypto';
+import { Crypto } from '../../../utils/crypto';
 import {
   IUser,
   User,
   UserSchemaName,
-} from 'src/modules/user/models/user.model';
+} from '../models/user.model';
 import { CreateUserDto, SignInUserDto, UserDto } from '../dtos/UserDto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -80,7 +80,7 @@ export class UserService {
       throw new NotFoundException('Invalid Email');
     }
     const rawUser:any = { ...user };
-    const hash = rawUser.password;
+    const hash = user['password'];
     const verified = await new Crypto().verifyPassword(signInUserDto.password,hash);
     if(verified){
       const userResult = new MUser(user);

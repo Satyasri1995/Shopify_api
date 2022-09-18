@@ -22,7 +22,7 @@ export class ProductController {
 
     @Get("fetchAll")
     async fetchAllProducts(){
-      await await this.productService.findAllProducts();
+      return await this.productService.findAllProducts();
     }
 
     @Get("delete/:id")
