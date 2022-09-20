@@ -21,7 +21,7 @@ export class ProductService {
         if(!productResult){
             throw new ServiceUnavailableException("Failed to create the product");
         }
-        return productResult;
+        return "Product created successfully";
     }
 
     async updateProduct(data:ProductDto){

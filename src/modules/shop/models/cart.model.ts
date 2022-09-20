@@ -1,4 +1,4 @@
-import { ProductSchemaName, IProduct } from './../../product/models/product.model';
+import { ProductSchemaName, IProduct, Product } from './../../product/models/product.model';
 import { IUser, UserSchemaName } from './../../user/models/user.model';
 import { SchemaTypes } from 'mongoose';
 import { Schema } from 'mongoose';
@@ -31,7 +31,7 @@ export interface ICart{
     _id:string;
     user:string|IUser;
     products:{
-        product:IProduct|string,
+        product:any,
         quantity:number
     }[];
     createdAt:Date;
@@ -42,7 +42,7 @@ export class Cart{
     id:string;
     user:string|IUser;
     products:{
-        product:IProduct|string,
+        product:any,
         quantity:number
     }[];
     createdAt:Date;
@@ -50,7 +50,7 @@ export class Cart{
     constructor(data:ICart){
         this.id=data.id||data._id;
         this.user=data.user;
-        this.products=data.products;
+        this.products=data.products.map(item=>({product:new Product(item.product),quantity:item.quantity}));
         this.createdAt=data.createdAt;
         this.updatedAt=data.updatedAt;
     }

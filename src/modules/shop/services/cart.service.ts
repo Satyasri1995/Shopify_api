@@ -22,7 +22,7 @@ export class CartService {
         if(!cart){
             throw new NotFoundException("Cart not found")
         }
-        const pIdx = cart.products.findIndex(item=>item.product==cartDto.product);
+        const pIdx = cart.products.findIndex(item=>(item.product+'')==cartDto.product);
         if(pIdx>=0){
             cart.products[pIdx].quantity+=1;
         }else{
@@ -36,7 +36,7 @@ export class CartService {
     }
 
     async fetchCart(id:string){
-        const cart = await this.Cart.findOne({user:id}); 
+        const cart = await this.Cart.findOne({user:id}).populate("products.product").exec(); 
         if(!cart){
             throw new NotFoundException("Cart not found")
         }
@@ -49,7 +49,7 @@ export class CartService {
         if(!cart){
             throw new NotFoundException("Cart not found")
         }
-        cart.products=cart.products.filter(item=>item.product==cartDto.product);
+        cart.products=cart.products.filter(item=>(item.product+'')!==cartDto.product);
         const cartResult = await cart.save();
         if(!cartResult){
             throw new ServiceUnavailableException('Failed to remove from cart');

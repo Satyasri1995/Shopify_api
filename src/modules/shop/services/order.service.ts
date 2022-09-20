@@ -1,5 +1,5 @@
+import { OrderRemoveDto } from './../dtos/OrderRemoveDto';
 import { Cart, CartSchemaName, ICart } from './../models/cart.model';
-import { OrderDto } from './../dtos/order.dto';
 import { IOrder, Order, OrderSchemaName } from './../models/order.model';
 import {
   Injectable,
@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class OrderService {
   }
 
   async fetchOrder(id: string) {
-    const order = await this.Order.findOne({ user: id });
+    const order = await this.Order.findOne({ user: id }).populate("orders.items.product").exec();
     if (!order) {
       throw new NotFoundException('Order not found');
     }
@@ -33,20 +33,23 @@ export class OrderService {
     return orderResult;
   }
 
-  async addOrder(data: OrderDto) {
-    const order = await this.Order.findOne({ user: data.user });
+  async addOrder(id:string) {
+    const order = await this.Order.findOne({ user: id });
     if (!order) {
       throw new NotFoundException('Order not found');
     }
-    const cart = await this.Cart.findById(data.cart)
-      .populate('products.product')
-      .exec();
+    const cart = await this.Cart.findOne({user:id}).populate("products.product").exec();
     const cartResult = new Cart(cart);
     const totalPrice = cartResult.products.reduce((total, currentValue) => {
       const product: any = currentValue.product;
-      return total + product.price;
+      return total + product.price*currentValue.quantity;
     }, 0);
-    order.price = totalPrice;
+    const objId=new mongoose.Types.ObjectId();
+    order.orders.push({
+      _id:objId,
+      items:cartResult.products.map((item)=>({product:item.product.id,quantity:item.quantity})),
+      price:totalPrice
+    });
     const orderResult = await order.save();
     if (!orderResult) {
       throw new ServiceUnavailableException('Failed to place order');
@@ -59,28 +62,16 @@ export class OrderService {
     return 'Order placed successfully';
   }
 
-  async removeOrder(data: OrderDto) {
-    const order = await this.Order.findOne({ user: data.user });
+  async removeOrder(data:OrderRemoveDto) {
+    const order = await this.Order.findOne({ user: data.user});
     if (!order) {
       throw new NotFoundException('Order not found');
     }
-    const cart = await this.Cart.findById(data.cart);
-    const product = order.products.find((products) => products.product==data.product);
-    const pIdx = cart.products.findIndex(products=>products.product==data.product);
-    if(pIdx>=0){
-        cart.products[pIdx].quantity+=product.quantity;
-    }else{
-        cart.products.push(product);
-    }
-    order.products = order.products.filter((products) => products.product==data.product);
+    order.orders=order.orders.filter(orderitem=>orderitem._id+""!==data.order);
     const orderResult = await order.save();
     if(!orderResult){
         throw new ServiceUnavailableException("Failed to update Orders");
     }
-    const cartResult = await cart.save();
-    if(!cartResult){
-        throw new ServiceUnavailableException("Failed to update Cart");
-    }
-    return "Order ccancelled successfully"
+    return "Order cancelled successfully"
   }
 }

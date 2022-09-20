@@ -1,4 +1,5 @@
-import { OrderDto } from './../dtos/order.dto';
+import { OrderRemoveDto } from './../dtos/OrderRemoveDto';
+
 import { OrderService } from './../services/order.service';
 import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
@@ -7,9 +8,9 @@ import { Response } from 'express';
 export class OrdersController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Post('add')
-  async addOrder(@Body() orderDto: OrderDto) {
-    return await this.orderService.addOrder(orderDto);
+  @Get('add/:id')
+  async addOrder(@Param('id') id:string ) {
+    return await this.orderService.addOrder(id);
   }
 
   @Get('fetchCart/:id')
@@ -18,7 +19,7 @@ export class OrdersController {
   }
 
   @Post('remove')
-  async removeOrder(@Body() orderDto: OrderDto) {
-    return await this.orderService.removeOrder(orderDto);
+  async removeOrder(@Body() data:OrderRemoveDto) {
+    return await this.orderService.removeOrder(data);
   }
 }
