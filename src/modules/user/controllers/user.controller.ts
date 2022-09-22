@@ -1,11 +1,12 @@
 import { CreateUserDto, SignInUserDto, UserDto } from './../dtos/UserDto';
 import { UserService } from '../services/user.service';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { AuthService } from './../../../services/auth/auth.service';
+import { User } from '../models/user.model';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,private auth:AuthService) {}
 
   @Post('signup')
   async createUser(@Body() createUserDto: CreateUserDto){
@@ -28,7 +29,10 @@ export class UserController {
   }
 
   @Post('signin')
-  async signInUser(@Body() signInUserDto:SignInUserDto){
-    return await this.userService.signInUser(signInUserDto)
+  async signInUser(@Body() signInUserDto:SignInUserDto,@Res({passthrough:true}) response){
+    const user:any = await this.userService.signInUser(signInUserDto);
+    const jwToken = `Bearer ${this.auth.sign(user)}`;
+    response.setHeader('Authorization', jwToken, {httpOnly: true});
+    return {user,jwToken};
   }
 }
